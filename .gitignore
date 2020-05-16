@@ -1,0 +1,17 @@
+# pycharm
+__pycache__/
+.idea/
+
+# venv
+pygame-venv/
+
+# pyinstaller
+dist/
+build/
+
+# others
+untracked/
+
+
+*.prof
+*.bat
