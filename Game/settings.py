@@ -5,6 +5,9 @@ SCREEN_WIDTH = int(SCREEN_HEIGHT * 16 / 9)
 FINAL_HEIGHT = 720
 FINAL_WIDTH = int(FINAL_HEIGHT * 16 / 9)
 
+FULLSCREEN = False
+SHOW_FPS = False
+
 WIN_TITLE = "Tim's Adventures"
 FPS = 60
 

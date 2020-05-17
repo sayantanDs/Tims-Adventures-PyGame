@@ -37,34 +37,60 @@ class Game:
         Mouse.init()
 
         self._scenes = {
-            "level_manager": Levels(self._switch_scene),
-            "pause_menu": PauseMenu(self._switch_scene),
-            "start_menu": StartMenu(self._switch_scene),
-            "settings_menu": SettingsMenu(self._switch_scene)
+            "level_manager": [Levels, (self.goto_scene,)],
+            "pause_menu": [PauseMenu, (self.goto_scene,)],
+            "start_menu": [StartMenu, (self.goto_scene,)],
+            "settings_menu": [SettingsMenu, (self.goto_scene, self.update_display_config)]
         }
-        self._scene = self._scenes["start_menu"]
-        self._prev_scene = self._scene
+        self._scene = None
+        self._scene_stack = []
+        self.goto_scene("start_menu")
 
         pygame.mixer.music.load(os.path.join(settings.music_folder, 'Road to Dazir.ogg'))
-        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.set_volume(1)
         pygame.mixer.music.play(-1)
 
         self.clock = pygame.time.Clock()
 
-    def _switch_scene(self, scene_name):
+    def goto_scene(self, scene_name):
         if scene_name == "quit":
             self.exit_game = True
         elif scene_name == "previous":
-            self._scene = self._prev_scene
+            self.goto_previous_scene()
         elif scene_name in self._scenes:
-            self._prev_scene = self._scene
-            self._scene = self._scenes[scene_name]
+            self._scene_stack.append(self._scenes[scene_name][0](*self._scenes[scene_name][1]))
+            print("Going to", scene_name, ";  ", self._scene_stack[-1])
+            self._scene = self._scene_stack[-1]
+
+    def goto_previous_scene(self):
+        if len(self._scene_stack) > 1:
+            self._scene = self._scene_stack[-2]
+            self._scene_stack.pop()
+
+    def update_display_config(self, fullscreen, height=settings.FINAL_HEIGHT):
+        needs_update = False
+        if settings.FULLSCREEN != fullscreen:
+            settings.FULLSCREEN = fullscreen
+            needs_update = True
+        if settings.FINAL_HEIGHT != height:
+            settings.FINAL_HEIGHT = height
+            settings.FINAL_WIDTH = int(settings.FINAL_HEIGHT * 16 / 9)
+            needs_update = True
+
+        if needs_update:
+            if settings.FULLSCREEN:
+                pygame.display.set_mode((settings.FINAL_WIDTH, settings.FINAL_HEIGHT),
+                                        self.display_flags | pygame.FULLSCREEN)
+            else:
+                pygame.display.set_mode((settings.FINAL_WIDTH, settings.FINAL_HEIGHT),
+                                        self.display_flags)
 
     def render(self):
         self._scene.render(self.screen)
 
         # render fps
-        Font.put_text(self.screen, str(int(self.clock.get_fps())), (settings.SCREEN_WIDTH-50, 16), (251, 255, 196))
+        if settings.SHOW_FPS:
+            Font.put_text(self.screen, str(int(self.clock.get_fps())), (settings.SCREEN_WIDTH-50, 16), (251, 255, 196))
 
         if self._scale_screen:
             self.display.blit(pygame.transform.scale(self.screen, self.display.get_rect().size), (0, 0))
@@ -86,13 +112,7 @@ class Game:
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_t:
                     settings.DEBUG_DRAW = not settings.DEBUG_DRAW
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_f:
-                    self.fullscreen = not self.fullscreen
-                    if self.fullscreen:
-                        pygame.display.set_mode((settings.FINAL_WIDTH, settings.FINAL_HEIGHT),
-                                                self.display_flags | pygame.FULLSCREEN)
-                    else:
-                        pygame.display.set_mode((settings.FINAL_WIDTH, settings.FINAL_HEIGHT),
-                                                self.display_flags)
+                    self.update_display_config(not settings.FULLSCREEN)
                 else:
                     self._scene.handle_events(event)
 

@@ -1,3 +1,10 @@
 Road to Dazir:
 by Eliot Corley from Chaos is Harmony
 [https://opengameart.org/content/outdoor-environment-music]
+
+zipclick:
+https://opengameart.org/content/zippo-click-sound
+
+click:
+https://soundcloud.com/third-octave
+[https://opengameart.org/content/backwards-button-press-ui-sound]
