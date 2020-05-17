@@ -8,7 +8,7 @@ from .Camera import Camera
 from .ParallaxBg import ParallaxLayer
 from . import settings
 import os
-from .UI import Font
+from .UI import Font, Mouse
 
 
 class Levels(GameScene):
@@ -88,11 +88,7 @@ class Levels(GameScene):
             ParallaxLayer(self.textures['parallax_2'], 0.4, self.camera, self.map.width, self.map.height),
             ParallaxLayer(self.textures['parallax_1'], 0.6, self.camera, self.map.width, self.map.height),
         ]
-        self.parallax_fg = [
-        ]
-
-        # start bg music
-        # pygame.mixer.music.play(-1)
+        self.parallax_fg = []
 
     def render_backgrounds(self, surface):
         # surface.fill((222, 253, 253))
@@ -116,11 +112,8 @@ class Levels(GameScene):
         Font.put_text(surface, str(self.player.coins), (x+140, y), (251, 251, 251))
 
     def render(self, surface):
-        # if not self._playing_bgm:
-        #     pygame.mixer.music.load(os.path.join(settings.music_folder, 'Road to Dazir.ogg'))
-        #     pygame.mixer.music.set_volume(0.5)
-        #     pygame.mixer.music.play(-1)
-        #     self._playing_bgm = True
+        if Mouse.is_visible():
+            Mouse.set_visible(False)
 
         if self.level_complete:
             surface.fill((220, 220, 220), special_flags=pygame.BLEND_MULT)
@@ -137,6 +130,13 @@ class Levels(GameScene):
                     obs.render(surface, self.camera)
             # self.render_foregrounds(surface)
 
+    def respawn_player(self):
+        self.player.health = self.player._max_health
+        p_pos = self.player.rect.center
+        s_pos = self.map.spawn_point
+        c_pos = (s_pos[0]+(p_pos[0]-s_pos[0])//3, s_pos[1]+(p_pos[1]-s_pos[1])//3)
+        self.player.set_pos(self.map.spawn_point)
+        self.camera.set_pos(c_pos)
 
     def update(self, delta_time):
         self.camera.move_to(self.player.rect.center, delta_time)
@@ -156,8 +156,7 @@ class Levels(GameScene):
                 coin.update(delta_time)
 
             if self.player.health == 0:
-                self.player.health = self.player._max_health
-                self.load_new_level(self.current_level)
+                self.respawn_player()
 
         # goal reached, fadeout animation
         elif self._fadeout_timer > 0:

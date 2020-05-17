@@ -1,12 +1,5 @@
 import pygame
-import sys
-import os
 from . import settings
-from .Map import Map
-from .ParallaxBg import make_parallax_bg
-from .Player import Player
-from .Camera import Camera
-from .Mob import Mob
 from .utils import *
 from .Levels import Levels
 from .Menu import StartMenu, PauseMenu, SettingsMenu

@@ -1,10 +1,21 @@
-Road to Dazir:
+Road to Dazir.ogg:
 by Eliot Corley from Chaos is Harmony
 [https://opengameart.org/content/outdoor-environment-music]
 
-zipclick:
-https://opengameart.org/content/zippo-click-sound
+zipclick.wav:
+[https://opengameart.org/content/zippo-click-sound]
 
-click:
-https://soundcloud.com/third-octave
-[https://opengameart.org/content/backwards-button-press-ui-sound]
+klick1.wav:
+[https://opengameart.org/content/multiple-click-sounds-effects]
+
+(Sound1.wav, Sound2.wav):
+from Mythril Age SFX Pack v1
+[https://mythril-age.itch.io/mythril-age-sfx-pack-v1]
+
+Retro PickUp Coin 04.wav:
+from FreeSFX
+[https://kronbits.itch.io/freesfx]
+
+jump.wav:
+by Jesús Lastra
+[https://opengameart.org/content/8-bit-jump-1]

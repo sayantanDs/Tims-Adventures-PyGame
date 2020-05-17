@@ -16,6 +16,9 @@ class StartMenu(GameScene):
     def __init__(self, goto_scene):
         GameScene.__init__(self)
         self._load_resources()
+
+        Mouse.set_visible(True)
+
         self._title = Font.get_render(settings.WIN_TITLE, size="huge")
         self._text_rect = self._title.get_rect()
         self._text_x = (settings.SCREEN_WIDTH - self._text_rect.width) // 2
@@ -51,6 +54,7 @@ class StartMenu(GameScene):
 class PauseMenu(GameScene):
     def __init__(self, goto_scene):
         GameScene.__init__(self)
+        Mouse.set_visible(True)
         w, h = 150, 50
 
         self._text_surface = Font.get_render("Paused", size="big")
@@ -87,6 +91,7 @@ class SettingsMenu(GameScene):
         self._update_display_config = update_display_config
 
         GameScene.__init__(self)
+        Mouse.set_visible(True)
         w, h = 150, 50
 
         self._text_surface = Font.get_render("Settings", size="big")

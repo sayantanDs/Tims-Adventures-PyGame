@@ -11,7 +11,7 @@ class CheckBox:
     @staticmethod
     def _load_resources():
         if CheckBox.click_sound is None:
-            CheckBox.click_sound = pygame.mixer.Sound(os.path.join(settings.music_folder, 'klicks', 'klick1.wav'))
+            CheckBox.click_sound = pygame.mixer.Sound(os.path.join(settings.music_folder, 'klick1.wav'))
             CheckBox.click_sound.set_volume(0.5)
 
     def __init__(self, pos, text, text_color=(255, 255, 255)):

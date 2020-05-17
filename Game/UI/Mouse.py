@@ -18,6 +18,10 @@ class Mouse:
         Mouse._visible = torf
 
     @staticmethod
+    def is_visible():
+        return Mouse._visible
+
+    @staticmethod
     def render(surface):
         if Mouse._visible:
             # surface.blit(Mouse.cursor_img, Mouse.get_pos())

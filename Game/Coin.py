@@ -17,8 +17,8 @@ class Coin(pygame.sprite.Sprite):
             Coin.texture = pygame.image.load(os.path.join(settings.img_folder, "coins_animation.png")).convert_alpha()
 
         if Coin.pickup_sound is None:
-            Coin.pickup_sound = pygame.mixer.Sound(os.path.join(settings.music_folder, "bfxr_sounds", "Pickup_Coin.wav"))
-            Coin.pickup_sound.set_volume(0.3)
+            Coin.pickup_sound = pygame.mixer.Sound(os.path.join(settings.music_folder, "Retro PickUp Coin 04.wav"))
+            Coin.pickup_sound.set_volume(0.2)
 
     def __init__(self, x, y, groups):
         self._layer = 3

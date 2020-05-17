@@ -12,8 +12,8 @@ class Button:
     @staticmethod
     def _load_resources():
         if Button.select_sound is None:
-            Button.select_sound = pygame.mixer.Sound(os.path.join(settings.music_folder, 'zipclick1.wav'))
-            Button.click_sound = pygame.mixer.Sound(os.path.join(settings.music_folder, 'klicks', 'klick1.wav'))
+            Button.select_sound = pygame.mixer.Sound(os.path.join(settings.music_folder, 'zipclick.wav'))
+            Button.click_sound = pygame.mixer.Sound(os.path.join(settings.music_folder, 'klick1.wav'))
             Button.click_sound.set_volume(0.5)
 
     def __init__(self, pos, size, text, callback, bttn_color=(48, 59, 77), text_color=(255,255,255)):

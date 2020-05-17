@@ -2,29 +2,6 @@ import pygame
 import math
 
 
-def repeat(image, n):
-    r = image.get_rect()
-    img = pygame.Surface((r.width*n, r.height), pygame.SRCALPHA)
-    img.blits([(image, (r.width*i, 0)) for i in range(n)])
-    return img
-
-
-def make_parallax_bg(filepath, parallax_multiplier, camera, map_width, map_height):
-    texture = pygame.image.load(filepath).convert_alpha()
-    w, h = texture.get_rect().size
-    c_w, c_h = camera.camera_rect.size
-
-    scaled_h = (map_height - c_h) * parallax_multiplier + c_h
-    scaled_w = w * scaled_h / h
-
-    texture = pygame.transform.scale(texture, (int(scaled_w), int(scaled_h)))
-    if scaled_w < map_width:
-        n = int(math.ceil(map_width / scaled_w))
-        texture = repeat(texture, n)
-
-    return texture
-
-
 class ParallaxLayer:
     def __init__(self, texture, parallax_multiplier, camera, map_width, map_height):
         self.parallax_multiplier = parallax_multiplier
@@ -38,10 +15,10 @@ class ParallaxLayer:
         scaled_h = (map_height - c_h) * parallax_multiplier + c_h
         scaled_w = w * scaled_h / h
 
-        texture = pygame.transform.scale(texture, (int(scaled_w), int(scaled_h)))
+        texture = pygame.transform.smoothscale(texture, (int(scaled_w), int(scaled_h)))
         if scaled_w < map_width:
             n = int(math.ceil(map_width / scaled_w))
-            texture = repeat(texture, n)
+            texture = self._repeat(texture, n)
 
         return texture
 
@@ -54,10 +31,5 @@ class ParallaxLayer:
     def render(self, surface, camera):
         surface.blit(self._scaled_texture, camera.get_relative_pos(0, 0, self.parallax_multiplier))
 
-        # surface.blit(self._scaled_texture, (0, 0),
-        #              area=pygame.Rect(camera.camera_rect.x*self.parallax_multiplier,
-        #                               camera.camera_rect.y*self.parallax_multiplier,
-        #                               camera.camera_rect.width,
-        #                               camera.camera_rect.height))
 
 
