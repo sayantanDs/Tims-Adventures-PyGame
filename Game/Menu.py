@@ -19,7 +19,8 @@ class StartMenu(GameScene):
 
         Mouse.set_visible(True)
 
-        self._title = Font.get_render(settings.WIN_TITLE, size="huge")
+        # self._title = Font.get_render(settings.WIN_TITLE, size="huge")
+        self._title = pygame.image.load(os.path.join(settings.img_folder, "title_text.png"))
         self._text_rect = self._title.get_rect()
         self._text_x = (settings.SCREEN_WIDTH - self._text_rect.width) // 2
         self._text_y = self._text_rect.height // 2
@@ -34,7 +35,7 @@ class StartMenu(GameScene):
     def render(self, surface):
         # surface.fill((35, 25, 40))
         surface.blit(self.bg, (0,0))
-        # surface.fill((250, 250, 250), special_flags=pygame.BLEND_MULT)
+        # surface.fill((120, 120, 120), special_flags=pygame.BLEND_MULT)
         surface.blit(self._title, (self._text_x, self._text_y))
         self.start_bttn.render(surface)
         self.settings_bttn.render(surface)
@@ -101,7 +102,9 @@ class SettingsMenu(GameScene):
 
         self._fullscreen_checkbox = CheckBox((50, self._text_rect.bottom+50), "Fullscreen")
         self._fullscreen_checkbox.selected = settings.FULLSCREEN
-        self._fps_checkbox = CheckBox((50, self._text_rect.bottom + 100), "Show FPS")
+        self._scale_checkbox = CheckBox((50, self._text_rect.bottom + 100), "Scale to 1280x720")
+        self._scale_checkbox.selected = (settings.FINAL_HEIGHT == 720)
+        self._fps_checkbox = CheckBox((50, self._text_rect.bottom + 150), "Show FPS")
         self._fps_checkbox.selected = settings.SHOW_FPS
 
         self.continue_bttn = Button((50, (settings.SCREEN_HEIGHT - h - 25)), (w, h),
@@ -109,13 +112,15 @@ class SettingsMenu(GameScene):
 
     def _on_done(self):
         settings.SHOW_FPS = self._fps_checkbox.selected
-        self._update_display_config(self._fullscreen_checkbox.selected)
+        h = 720 if self._scale_checkbox.selected else 480
+        self._update_display_config(self._fullscreen_checkbox.selected, h)
         self._goto_scene("previous")
 
     def render(self, surface):
         surface.fill((35, 25, 40))
         surface.blit(self._text_surface, (self._text_x, self._text_y))
         self._fullscreen_checkbox.render(surface)
+        self._scale_checkbox.render(surface)
         self._fps_checkbox.render(surface)
         self.continue_bttn.render(surface)
 
@@ -124,5 +129,6 @@ class SettingsMenu(GameScene):
 
     def handle_events(self, event):
         self._fullscreen_checkbox.handle_events(event)
+        self._scale_checkbox.handle_events(event)
         self._fps_checkbox.handle_events(event)
         self.continue_bttn.handle_events(event)

@@ -15,12 +15,9 @@ class Game:
         self.fullscreen_flag = pygame.FULLSCREEN
         self.fullscreen = False
         self._scale_screen = False
-        if settings.SCREEN_WIDTH != settings.FINAL_WIDTH:
-            self.display = pygame.display.set_mode((settings.FINAL_WIDTH, settings.FINAL_HEIGHT), self.display_flags)
-            self.screen = pygame.Surface((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
-            self._scale_screen = True
-        else:
-            self.screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT), self.display_flags)
+
+        self.display = pygame.display.set_mode((settings.FINAL_WIDTH, settings.FINAL_HEIGHT), self.display_flags)
+        self.screen = pygame.Surface((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
         self.screen_rect = self.screen.get_rect()
         pygame.display.set_caption(settings.WIN_TITLE)
@@ -64,6 +61,7 @@ class Game:
         needs_update = False
         if settings.FULLSCREEN != fullscreen:
             settings.FULLSCREEN = fullscreen
+            height = 720
             needs_update = True
         if settings.FINAL_HEIGHT != height:
             settings.FINAL_HEIGHT = height
@@ -85,11 +83,8 @@ class Game:
         if settings.SHOW_FPS:
             Font.put_text(self.screen, str(int(self.clock.get_fps())), (settings.SCREEN_WIDTH-50, 16), (251, 255, 196))
 
-        if self._scale_screen:
-            self.display.blit(pygame.transform.scale(self.screen, self.display.get_rect().size), (0, 0))
-            Mouse.render(self.display)
-        else:
-            Mouse.render(self.screen)
+        self.display.blit(pygame.transform.scale(self.screen, self.display.get_rect().size), (0, 0))
+        Mouse.render(self.display)
 
         pygame.display.flip()
 
