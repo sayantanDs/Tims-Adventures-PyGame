@@ -10,9 +10,10 @@ class Map:
         self.height = self.tmx.height * self.tmx.tileheight
 
         self.mob_spawns = []
-        self.ladders = []
+        self.coin_spawns = []
         self.collidables = []
-        self.coins = []
+        self.ladders = []
+        self.spikes = []
 
         self.surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
 
@@ -46,9 +47,9 @@ class Map:
                     x, y, w, h = p[0][0], p[1][1], p[1][0]-p[0][0], p[0][1] - p[1][1]
                     self.collidables.append(ObstacleSlope(x, y, w, h, 'right'))
             elif obj.name == "coin":
-                self.coins.append((obj.x, obj.y))
-            elif obj.name == "text":
-                pass
+                self.coin_spawns.append((obj.x, obj.y))
+            elif obj.name == "spikes":
+                self.spikes.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
             else:
                 self.collidables.append(ObstacleRect(obj.x, obj.y, obj.width, obj.height))
 

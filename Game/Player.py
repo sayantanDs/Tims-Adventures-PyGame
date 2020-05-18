@@ -222,6 +222,11 @@ class Player(RigidBody, pygame.sprite.Sprite):
             coin.pickup()
             self.coins += 1
 
+    def _spikes_collision(self, spikes_list):
+        for spikes in spikes_list:
+            if self.rect.colliderect(spikes):
+                self.hurt()
+
     def update(self, delta_time, map, mob_group, coin_group):
         if self._invincible_timer > 0:
             self._invincible_timer -= delta_time
@@ -229,6 +234,7 @@ class Player(RigidBody, pygame.sprite.Sprite):
                 self._invincible_timer = 0
         self._mob_collision(mob_group)
         self._coin_collision(coin_group)
+        self._spikes_collision(map.spikes)
 
         self._get_input()
         self.do_physics(delta_time, map)

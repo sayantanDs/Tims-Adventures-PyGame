@@ -113,7 +113,7 @@ class SettingsMenu(GameScene):
         self._fullscreen_checkbox = CheckBox((50, self._text_rect.bottom+50), "Fullscreen")
         self._fullscreen_checkbox.selected = settings.FULLSCREEN
         self._scale_checkbox = CheckBox((50, self._text_rect.bottom + 100), "Scale to 1280x720")
-        self._scale_checkbox.selected = (settings.FINAL_HEIGHT == 720)
+        self._scale_checkbox.selected = (settings.FINAL_HEIGHT != settings.SCREEN_HEIGHT)
         self._fps_checkbox = CheckBox((50, self._text_rect.bottom + 150), "Show FPS")
         self._fps_checkbox.selected = settings.SHOW_FPS
 

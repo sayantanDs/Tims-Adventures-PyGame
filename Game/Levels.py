@@ -79,7 +79,7 @@ class Levels(GameScene):
             Mob(mob_spawn, groups=(self.all_sprites, self.mobs))
 
         # coins
-        for coin_loc in self.map.coins:
+        for coin_loc in self.map.coin_spawns:
             Coin(coin_loc[0], coin_loc[1], groups=(self.all_sprites, self.coins))
 
         # make parallax layers

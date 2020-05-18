@@ -67,7 +67,7 @@ class Game:
         needs_update = False
         if settings.FULLSCREEN != fullscreen:
             settings.FULLSCREEN = fullscreen
-            height = 720
+            height = 720 if fullscreen else 480
             needs_update = True
         if settings.FINAL_HEIGHT != height:
             settings.FINAL_HEIGHT = height

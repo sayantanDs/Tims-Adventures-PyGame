@@ -96,24 +96,32 @@ class Mob(RigidBody, pygame.sprite.Sprite):
         return colliding
 
     def _change_states(self):
-        if self.jumping:
-            if self.state != self.State.jumping:
-                self.state = self.State.jumping
-        elif abs(self.v_x) > 0 and self.state != self.State.walking:
-            self.state = self.State.walking
-        elif abs(self.v_x) == 0 and self.state != self.State.idle:
-            self.state = self.State.idle
+        if self.state != self.State.dying:
+            if self.jumping:
+                if self.state != self.State.jumping:
+                    self.state = self.State.jumping
+            elif abs(self.v_x) > 0 and self.state != self.State.walking:
+                self.state = self.State.walking
+            elif abs(self.v_x) == 0 and self.state != self.State.idle:
+                self.state = self.State.idle
 
         if self.v_x < 0 and self.facing != 'left':
             self.facing = 'left'
         if self.v_x > 0 and self.facing != 'right':
             self.facing = 'right'
 
+    def _spikes_collision(self, spikes_list):
+        for spikes in spikes_list:
+            if self.rect.colliderect(spikes):
+                self.kill()
+                break
+
     def update(self, delta_time, map):
         if self.state != self.State.dying:
             colliding = self.do_physics(delta_time, map.collidables)
             self._ai(colliding, map.collidables)
             self._change_states()
+            self._spikes_collision(map.spikes)
         else:
             self.kill()     # to finish animation and kill sprite
 
@@ -121,9 +129,10 @@ class Mob(RigidBody, pygame.sprite.Sprite):
 
     def kill(self):
         if self.state != self.State.dying:
+            self.state = self.State.dying
             self.death_sound.play()
             print(self, "Mob died")
-            self.state = self.State.dying
+
         # if dying animation is over, kill sprite
         # elif self.animation.sprites[self.State.dying].current_frame == \
         #         (self.animation.sprites[self.State.dying].frames - 1):
