@@ -106,6 +106,8 @@ class Game:
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_t:
                     settings.DEBUG_DRAW = not settings.DEBUG_DRAW
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_f:
+                    if isinstance(self._scene, Levels):
+                        self.goto_scene("pause_menu")
                     self.update_display_config(not settings.FULLSCREEN)
                 else:
                     self._scene.handle_events(event)
