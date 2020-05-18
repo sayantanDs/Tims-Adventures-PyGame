@@ -12,8 +12,8 @@ from .UI import Font, Mouse
 
 
 class Levels(GameScene):
-    def __init__(self, switch_scene):
-        self._switch_scene = switch_scene
+    def __init__(self, goto_scene):
+        self._goto_scene = goto_scene
         GameScene.__init__(self)
 
         self.levels = [
@@ -164,8 +164,12 @@ class Levels(GameScene):
 
         # fadeout animation complete, load new level
         else:
-            self.current_level = (self.current_level+1) % len(self.levels)
-            self.load_new_level(self.current_level)
+            if self.current_level == len(self.levels)-1:
+                print("Game completed!")
+                self._goto_scene("end_menu")
+            else:
+                self.current_level = (self.current_level+1)
+                self.load_new_level(self.current_level)
 
     def handle_events(self, event):
         if event.type == pygame.KEYDOWN:
@@ -174,7 +178,7 @@ class Levels(GameScene):
                     self.camera.set_boundaries(self.map_img.get_rect())
                 else:
                     self.camera.set_boundaries(None)
-            elif event.key == pygame.K_p:
-                self._switch_scene("pause_menu")
+            elif event.key == pygame.K_p or event.key == pygame.K_ESCAPE:
+                self._goto_scene("pause_menu")
 
 

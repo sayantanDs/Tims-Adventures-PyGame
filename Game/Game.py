@@ -2,7 +2,7 @@ import pygame
 from . import settings
 from .utils import *
 from .Levels import Levels
-from .Menu import StartMenu, PauseMenu, SettingsMenu
+from .Menu import StartMenu, PauseMenu, SettingsMenu, EndMenu
 from .UI import Mouse, Font
 
 
@@ -30,7 +30,8 @@ class Game:
             "level_manager": [Levels, (self.goto_scene,)],
             "pause_menu": [PauseMenu, (self.goto_scene,)],
             "start_menu": [StartMenu, (self.goto_scene,)],
-            "settings_menu": [SettingsMenu, (self.goto_scene, self.update_display_config)]
+            "settings_menu": [SettingsMenu, (self.goto_scene, self.update_display_config)],
+            "end_menu": [EndMenu, (self.goto_scene,)],
         }
         self._scene = None
         self._scene_stack = []
@@ -47,13 +48,18 @@ class Game:
             self.exit_game = True
         elif scene_name == "previous":
             self.goto_previous_scene()
+        elif scene_name == "start_menu" and len(self._scene_stack) > 0:
+            self._scene_stack = self._scene_stack[:1]
+            print("[GameScene Manager]  Returning to", self._scene_stack[-1])
+            self._scene = self._scene_stack[-1]
         elif scene_name in self._scenes:
             self._scene_stack.append(self._scenes[scene_name][0](*self._scenes[scene_name][1]))
-            print("Going to", scene_name, ";  ", self._scene_stack[-1])
+            print("[GameScene Manager]  Going to", self._scene_stack[-1])
             self._scene = self._scene_stack[-1]
 
     def goto_previous_scene(self):
         if len(self._scene_stack) > 1:
+            print("[GameScene Manager]  Returning to", self._scene_stack[-2])
             self._scene = self._scene_stack[-2]
             self._scene_stack.pop()
 
@@ -95,7 +101,7 @@ class Game:
 
             # event handling
             for event in pygame.event.get():
-                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                if event.type == pygame.QUIT:
                     self.exit_game = True
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_t:
                     settings.DEBUG_DRAW = not settings.DEBUG_DRAW
