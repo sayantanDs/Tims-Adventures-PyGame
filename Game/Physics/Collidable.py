@@ -2,10 +2,6 @@ import pygame
 
 
 class Collidable:
-    # constants for collidable types
-    STATIC = 0
-    DYNAMIC = 1
-
     def __init__(self, x, y, width, height):
         self.rect = pygame.Rect(x, y, width, height)
 

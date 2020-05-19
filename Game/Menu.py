@@ -225,15 +225,8 @@ class EndMenu(GameScene):
         self.start_menu_bttn.render(surface)
         self.exit_bttn.render(surface)
 
-        # for i in range(10):
-        #     pygame.draw.circle(surface, self._colors[random.randrange(0, len(self._colors))],
-        #                 (random.randrange(10, settings.SCREEN_WIDTH), random.randrange(10, settings.SCREEN_HEIGHT)), 3)
         for confetti in self._confettis:
             confetti.render(surface)
-
-        # if not self._music_played:
-        #     self._music_played = True
-        #     self.victory_music.play()
 
     def update(self, delta_time):
         self._elapsed_time += delta_time

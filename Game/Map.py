@@ -23,11 +23,6 @@ class Map:
                 for x, y, tile_image in layer.tiles():
                     surface.blit(tile_image, (x * self.tmx.tilewidth,
                                               (y + 1) * self.tmx.tileheight - tile_image.get_rect().height))
-                # for x, y, gid in layer:
-                #     tile = self.tmx.get_tile_image_by_gid(gid)
-                #     if tile:
-                #         r = tile.get_rect()
-                #         surface.blit(tile, (x * self.tmx.tilewidth, (y + 1) * self.tmx.tileheight - r.height))
 
     def load_obstacles(self):
         for obj in self.tmx.objects:

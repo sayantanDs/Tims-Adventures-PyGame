@@ -133,15 +133,11 @@ class Mob(RigidBody, pygame.sprite.Sprite):
             self.death_sound.play()
             print(self, "Mob died")
 
-        # if dying animation is over, kill sprite
-        # elif self.animation.sprites[self.State.dying].current_frame == \
-        #         (self.animation.sprites[self.State.dying].frames - 1):
         elif self.animation.is_over():
             pygame.sprite.Sprite.kill(self)
             print(self, "Mob sprite killed")
 
     def render(self, surface, camera):
-        # surface.blit(self.animation.get_frame(self.facing), camera.get_relative_pos(self.rect.x, self.rect.y))
         self.animation.render(surface, camera.get_relative_rect(self.rect), self.facing)
         RigidBody.render(self, surface, camera)
 

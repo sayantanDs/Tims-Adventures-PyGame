@@ -6,7 +6,6 @@ from .. import settings
 class ObstacleRect(Collidable):
     def __init__(self, x, y, width, height):
         Collidable.__init__(self, x, y, width, height)
-        self.type = Collidable.STATIC
 
     def render(self, surface, camera):
         if settings.DEBUG_DRAW:
@@ -18,7 +17,6 @@ class ObstacleRect(Collidable):
 class ObstacleSlope(Collidable):
     def __init__(self, x, y, width, height, direction='right'):
         Collidable.__init__(self, x, y, width, height)
-        self.type = Collidable.STATIC
         self.direction = direction
         self.slope = height / width
         if direction == 'left':
@@ -64,7 +62,6 @@ class ObstacleSlope(Collidable):
 class ObstacleOneWay(Collidable):
     def __init__(self, x, y, width, height):
         Collidable.__init__(self, x, y, width, height)
-        self.type = Collidable.STATIC
 
     def get_overlap_x(self, rect: pygame.Rect):
         return 0, None

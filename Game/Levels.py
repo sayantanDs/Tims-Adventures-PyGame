@@ -40,7 +40,6 @@ class Levels(GameScene):
         self._total_coins = 0
         self._total_deaths = 0
 
-
         parallax_folder = os.path.join(settings.img_folder, "Parallax Forest Background (Seamless)",
                                        "edited")
         self.textures = {
@@ -54,14 +53,8 @@ class Levels(GameScene):
             "heart": pygame.transform.scale(pygame.image.load(os.path.join(settings.img_folder, "HUD", "heart.png")).convert_alpha(), (30, 27)),
 
         }
-        # bg music
-        # pygame.mixer.music.load(os.path.join(settings.music_folder, 'Road to Dazir.ogg'))
-        # pygame.mixer.music.set_volume(0.5)
-        # self._playing_bgm = False
 
         self.load_new_level(self.current_level)
-
-
 
     def load_new_level(self, level_num):
         self.all_sprites.empty()
@@ -143,7 +136,7 @@ class Levels(GameScene):
         c_pos = (s_pos[0]+(p_pos[0]-s_pos[0])//3, s_pos[1]+(p_pos[1]-s_pos[1])//3)
         self.player.set_pos(self.map.spawn_point)
         self.camera.set_pos(c_pos)
-        self._total_deaths+=1
+        self._total_deaths += 1
 
     def update(self, delta_time):
         self.camera.move_to(self.player.rect.center, delta_time)

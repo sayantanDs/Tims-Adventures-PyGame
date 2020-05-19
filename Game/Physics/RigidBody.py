@@ -8,8 +8,6 @@ from ..UI import Font
 class RigidBody(Collidable, pygame.sprite.Sprite):
     def __init__(self, x, y, width, height):
         Collidable.__init__(self,  x, y, width, height)
-        self.type = Collidable.DYNAMIC
-        self.pushable = True
 
         self.v_x = 0
         self.v_y = 0
@@ -61,17 +59,6 @@ class RigidBody(Collidable, pygame.sprite.Sprite):
                         collision_occurred = True
                         colliding[collision_dir] = True
 
-                        # transfer velocity to colliding object
-                        if self.type == Collidable.DYNAMIC:
-                            if collidable.type == Collidable.DYNAMIC and collidable.pushable:
-                                # v = (self.v_y*self.mass/collidable.mass)*min(self.restitution, collidable.restitution)
-                                m1 = self.mass
-                                m2 = collidable.mass
-                                u1 = self.v_y
-                                u2 = collidable.v_y
-                                self.v_y = ((m1-m2)*u1 + 2*m2*u2)/(m1+m2)
-                                collidable.v_y = ((m2-m1)*u2 + 2*m1*u1)/(m1+m2)
-
             # if collision occurred in this sweep, no need to sweep further
             if collision_occurred:
                 break
@@ -98,17 +85,6 @@ class RigidBody(Collidable, pygame.sprite.Sprite):
                         self.rect.x -= overlap_x
                         collision_occurred = True
                         colliding[collision_dir] = True
-
-                        # transfer velocity to colliding object
-                        if self.type == Collidable.DYNAMIC:
-                            if collidable.type == Collidable.DYNAMIC:
-                                # v = (self.v_y*self.mass/collidable.mass)*min(self.restitution, collidable.restitution)
-                                m1 = self.mass
-                                m2 = collidable.mass
-                                u1 = self.v_x
-                                u2 = collidable.v_x
-                                self.v_x = ((m1 - m2) * u1 + 2 * m2 * u2) / (m1 + m2)
-                                collidable.v_x = ((m2 - m1) * u2 + 2 * m1 * u1) / (m1 + m2)
 
             # if collision occurred in this sweep, no need to sweep further
             if collision_occurred:

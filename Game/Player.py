@@ -22,7 +22,7 @@ class Player(RigidBody, pygame.sprite.Sprite):
 
     @staticmethod
     def _load_resources():
-        player_folder = os.path.join(settings.img_folder, 'Jungle Asset Pack', 'character_edited_crisp')
+        player_folder = os.path.join(settings.img_folder, 'Jungle Asset Pack', 'character_edited')
         if Player.textures is None:
             print("loading player textures")
             Player.textures = {
@@ -38,7 +38,7 @@ class Player(RigidBody, pygame.sprite.Sprite):
                 'jump': pygame.mixer.Sound(os.path.join(settings.music_folder, 'jump.wav')),
                 'hurt': pygame.mixer.Sound(os.path.join(settings.music_folder, 'Sound_1.wav')),
             }
-            Player.sounds['jump'].set_volume(0.3)
+            Player.sounds['jump'].set_volume(0.25)
             Player.sounds['hurt'].set_volume(0.3)
 
     def __init__(self, spawn_point, groups):
@@ -77,8 +77,6 @@ class Player(RigidBody, pygame.sprite.Sprite):
         self._ledge_ground_checker = None  # will be made later
 
         self.climbing = False
-        self.controlling = False
-        self.controlling_object = None
 
     def set_pos(self, pos):
         self.rect.topleft = pos
@@ -120,7 +118,6 @@ class Player(RigidBody, pygame.sprite.Sprite):
             self.ledge_grabbing = False
             self.climbing = False
 
-
     def do_physics(self, delta_time, map):
         colliding = RigidBody.do_physics(self, delta_time, map.collidables, no_gravity=(self.ledge_grabbing or self.climbing))
         if colliding['bottom']:
@@ -147,8 +144,6 @@ class Player(RigidBody, pygame.sprite.Sprite):
                 self.ledge_grabbing = False
         elif self.climbing and not on_ladder:
             self.climbing = False
-
-
 
     def _ledge_grab(self, colliding, collidables):
         x = (self.rect.left - 3) if self.facing == 'left' else (self.rect.right + 3)
@@ -247,12 +242,4 @@ class Player(RigidBody, pygame.sprite.Sprite):
                 pygame.draw.circle(surface, (255, 255, 0), camera.get_relative_pos(*self._ledge_grab_checker), 3)
                 pygame.draw.circle(surface, (0, 255, 255), camera.get_relative_pos(*self._ledge_ground_checker), 3)
 
-    def render_healthbar(self, surface):
-        w, h = 64, 8
-        r = surface.get_rect()
-        x, y = (r.width - self._max_health*w - 30)//2, r.height - h*3
-        Font.put_text(surface, str(self.health), (x + self._max_health*w + 10, y-10), (251, 251, 251))
-
-        pygame.draw.rect(surface, (250, 250, 250), (x-2, y-2, self._max_health*w + 4, h + 4))
-        pygame.draw.rect(surface, (250, 10, 10), (x, y, self.health*w, h))
 
