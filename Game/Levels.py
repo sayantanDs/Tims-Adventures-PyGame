@@ -19,10 +19,9 @@ class Levels(GameScene):
         self.levels = [
             'level0.tmx',
             'level1.tmx',
-            # 'level2.tmx',
-            # 'level3.tmx',
-            # 'level4.tmx',
-            # 'level5.tmx',
+            'level2.tmx',
+            'level3.tmx',
+            'level4.tmx',
         ]
         self.current_level = 0
 
