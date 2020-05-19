@@ -3,7 +3,7 @@ Tim's Adventures
 
 A platformer game made with [PyGame](www.pygame.org)
 
-Welcome to **Tim's Adventure** through the mysterious jungles filled with enemies and treasures. Tim needs your help to 
+Welcome to **Tim's Adventures** through the mysterious jungles filled with enemies and treasures. Tim needs your help to 
 navigate through the difficult terrain and reach the goal! Check out the [Installation](#installation) section to start playing!
 
 ### About
