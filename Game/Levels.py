@@ -19,7 +19,10 @@ class Levels(GameScene):
         self.levels = [
             'level0.tmx',
             'level1.tmx',
-            'level5.tmx',
+            # 'level2.tmx',
+            # 'level3.tmx',
+            # 'level4.tmx',
+            # 'level5.tmx',
         ]
         self.current_level = 0
 
@@ -35,6 +38,8 @@ class Levels(GameScene):
         self.player = Player((0, 0), groups=(self.all_sprites,))
         self.camera = Camera()
 
+        self._total_coins = 0
+        self._total_deaths = 0
 
 
         parallax_folder = os.path.join(settings.img_folder, "Parallax Forest Background (Seamless)",
@@ -81,6 +86,7 @@ class Levels(GameScene):
         # coins
         for coin_loc in self.map.coin_spawns:
             Coin(coin_loc[0], coin_loc[1], groups=(self.all_sprites, self.coins))
+            self._total_coins+=1
 
         # make parallax layers
         self.parallax_bg = [
@@ -91,7 +97,8 @@ class Levels(GameScene):
         self.parallax_fg = []
 
     def render_backgrounds(self, surface):
-        # surface.fill((222, 253, 253))
+        # surface.fill((58, 68, 110))
+        # surface.fill((221, 209, 237))
         for i in range(len(self.parallax_bg)):
             self.parallax_bg[i].render(surface, self.camera)
 
@@ -137,6 +144,7 @@ class Levels(GameScene):
         c_pos = (s_pos[0]+(p_pos[0]-s_pos[0])//3, s_pos[1]+(p_pos[1]-s_pos[1])//3)
         self.player.set_pos(self.map.spawn_point)
         self.camera.set_pos(c_pos)
+        self._total_deaths+=1
 
     def update(self, delta_time):
         self.camera.move_to(self.player.rect.center, delta_time)
@@ -166,7 +174,7 @@ class Levels(GameScene):
         else:
             if self.current_level == len(self.levels)-1:
                 print("Game completed!")
-                self._goto_scene("end_menu")
+                self._goto_scene("end_menu", self.player.coins, self._total_coins, self._total_deaths)
             else:
                 self.current_level = (self.current_level+1)
                 self.load_new_level(self.current_level)

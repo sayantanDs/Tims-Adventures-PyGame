@@ -6,18 +6,18 @@ FINAL_HEIGHT = 480
 FINAL_WIDTH = int(FINAL_HEIGHT * 16 / 9)
 
 FULLSCREEN = False
-SHOW_FPS = False
+SHOW_FPS = True
 
 WIN_TITLE = "Tim's Adventures"
 FPS = 60
 
 # Game Constants
-jump_time = 1
+jump_time = 0.75
 jump_height = 64+16
 t = jump_time/2
 GRAVITY = int((2*jump_height)/(t*t))         # 640
 PLAYER_JUMP_SPEED = int((2*jump_height)/t)   # 320
-PLAYER_WALK_SPEED = int(32*8/jump_time)
+PLAYER_WALK_SPEED = int(32*6/jump_time)
 
 
 TERMINAL_V = 700

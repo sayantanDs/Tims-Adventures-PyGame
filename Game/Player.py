@@ -62,8 +62,8 @@ class Player(RigidBody, pygame.sprite.Sprite):
 
         self.jump_speed = settings.PLAYER_JUMP_SPEED
         self.walk_speed = settings.PLAYER_WALK_SPEED
-        self.climb_speed = settings.PLAYER_WALK_SPEED//2
-        self.jumping = False
+        self.climb_speed = settings.PLAYER_WALK_SPEED*2//3
+        self.can_jump = True
         self.facing = self.animation.sprites[self.state].default_facing
 
         self.coins = 0
@@ -105,21 +105,26 @@ class Player(RigidBody, pygame.sprite.Sprite):
         elif (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and not self.ledge_grabbing:
             self.v_x += 1
 
+        if self.v_x < 0 and self.facing != 'left':
+            self.facing = 'left'
+        if self.v_x > 0 and self.facing != 'right':
+            self.facing = 'right'
+
         self.v_x *= self.walk_speed
 
     def jump(self):
-        if not self.jumping:
+        if self.can_jump:
             Player.sounds['jump'].play()
             self.v_y = -self.jump_speed
-            self.jumping = True
+            self.can_jump = False
             self.ledge_grabbing = False
             self.climbing = False
 
 
     def do_physics(self, delta_time, map):
         colliding = RigidBody.do_physics(self, delta_time, map.collidables, no_gravity=(self.ledge_grabbing or self.climbing))
-        if self.jumping and colliding['bottom']:
-            self.jumping = False
+        if colliding['bottom']:
+            self.can_jump = True
 
         self._ledge_grab(colliding, map.collidables)
         self._ladder_climb(map.ladders)
@@ -138,7 +143,7 @@ class Player(RigidBody, pygame.sprite.Sprite):
         if not self.climbing:
             if on_ladder and key_pressed:
                 self.climbing = True
-                self.jumping = False
+                self.can_jump = True
                 self.ledge_grabbing = False
         elif self.climbing and not on_ladder:
             self.climbing = False
@@ -147,18 +152,13 @@ class Player(RigidBody, pygame.sprite.Sprite):
 
     def _ledge_grab(self, colliding, collidables):
         x = (self.rect.left - 3) if self.facing == 'left' else (self.rect.right + 3)
-        self._ledge_grab_checker = (x, self.rect.top - 5)
-        self._ledge_ground_checker = (x, self.rect.top + 5)
+        self._ledge_grab_checker = (x, self.rect.top - 8)
+        self._ledge_ground_checker = (x, self.rect.top + 8)
         if not (self.ledge_grabbing or self.climbing):
-            if colliding['left'] and (not self._obstacle_check(self._ledge_grab_checker, collidables)) and \
+            if colliding[self.facing] and (not self._obstacle_check(self._ledge_grab_checker, collidables)) and \
                     self._obstacle_check(self._ledge_ground_checker, collidables):
                 self.ledge_grabbing = True
-                self.jumping = False
-                self.v_y = 0
-            if colliding['right'] and (not self._obstacle_check(self._ledge_grab_checker, collidables)) and \
-                    self._obstacle_check(self._ledge_ground_checker, collidables):
-                self.ledge_grabbing = True
-                self.jumping = False
+                self.can_jump = True
                 self.v_y = 0
         elif self.ledge_grabbing:
             if not self._obstacle_check(self._ledge_ground_checker, collidables):
@@ -172,39 +172,32 @@ class Player(RigidBody, pygame.sprite.Sprite):
         return False
 
     def _change_states(self):
-        if self.jumping:
-            if self.v_y < 0 and self.state != self.State.jumping:
-                self.state = self.State.jumping
-            elif self.v_y > 0 and self.state != self.State.falling:
-                self.state = self.State.falling
-        elif self.climbing:
+        if self.climbing:
             if abs(self.v_y) != 0:
                 self.state = self.State.climbing
             else:
                 self.state = self.State.climbing_static
         elif self.ledge_grabbing:
             self.state = self.State.ledge_grabbing
+        elif self.v_y < 0:
+            self.state = self.State.jumping
         elif self.v_y > 100:
             self.state = self.State.falling
+            self.can_jump = False
         else:
             if abs(self.v_x) > 0 and self.state != self.State.walking:
                 self.state = self.State.walking
             elif abs(self.v_x) == 0 and self.state != self.State.idle:
                 self.state = self.State.idle
 
-        if self.v_x < 0 and self.facing != 'left':
-            self.facing = 'left'
-        if self.v_x > 0 and self.facing != 'right':
-            self.facing = 'right'
-
     def _mob_collision(self, mob_group):
         mobs = pygame.sprite.spritecollide(self, mob_group, False)
         for mob in mobs:
             if mob.state != mob.State.dying:
                 # mob stomp
-                if (self.v_y >= 0) and (self.rect.bottom < (mob.rect.top + mob.rect.height//3)):
+                if (self.v_y >= 0) and (self.rect.bottom <= (mob.rect.top + mob.rect.height//2)):
                     mob.kill()
-                    self.jumping = False
+                    self.can_jump = True
                     self.jump()
                 elif self._invincible_timer == 0:
                     self.hurt()

@@ -60,6 +60,8 @@ from the following sources:
 * https://mythril-age.itch.io/mythril-age-sfx-pack-v1
 * https://kronbits.itch.io/freesfx
 * https://opengameart.org/content/8-bit-jump-1
+* https://opengameart.org/content/victory-theme-for-rpg
+* https://bigsoundbank.com/detail-1554-party-horn-2.html
 
 ### Fonts
 * https://www.1001fonts.com/libre-franklin-font.html

@@ -43,7 +43,7 @@ class Game:
 
         self.clock = pygame.time.Clock()
 
-    def goto_scene(self, scene_name):
+    def goto_scene(self, scene_name, *other_args):
         if scene_name == "quit":
             self.exit_game = True
         elif scene_name == "previous":
@@ -53,7 +53,7 @@ class Game:
             print("[GameScene Manager]  Returning to", self._scene_stack[-1])
             self._scene = self._scene_stack[-1]
         elif scene_name in self._scenes:
-            self._scene_stack.append(self._scenes[scene_name][0](*self._scenes[scene_name][1]))
+            self._scene_stack.append(self._scenes[scene_name][0](*self._scenes[scene_name][1], *other_args))
             print("[GameScene Manager]  Going to", self._scene_stack[-1])
             self._scene = self._scene_stack[-1]
 
