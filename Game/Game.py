@@ -11,6 +11,9 @@ class Game:
         # os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (20, 50)
         pygame.init()
 
+        icon = pygame.image.load('Resources/tim_icon.ico')
+        pygame.display.set_icon(icon)
+
         self.display_flags = pygame.HWSURFACE | pygame.DOUBLEBUF
         self.fullscreen_flag = pygame.FULLSCREEN
         self.fullscreen = False
